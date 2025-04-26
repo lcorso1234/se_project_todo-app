@@ -74,5 +74,9 @@ class FormValidator {
       });
     });
   }
+  resetValidation() {
+    this._formEl.reset();
+  }
 }
+
 export default FormValidator;
