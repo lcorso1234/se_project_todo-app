@@ -19,11 +19,16 @@ const closeModal = (modal) => {
   modal.classList.remove("popup_visible");
 };
 
-// The logic in this function should all be handled in the Todo class.
+// Handles the creation of a Todo element
 const generateTodo = (data) => {
   const todo = new Todo(data, "#todo-template");
-  const todoElement = todo.getView();
-  return todoElement;
+  return todo.getView();
+};
+
+// Renders the todo onto the page
+const renderTodo = (data) => {
+  const todoElement = generateTodo(data);
+  todosList.append(todoElement);
 };
 
 addTodoButton.addEventListener("click", () => {
@@ -39,22 +44,20 @@ addTodoForm.addEventListener("submit", (evt) => {
   const name = evt.target.name.value;
   const dateInput = evt.target.date.value;
 
-  // Create a date object and adjust for timezone
   const date = new Date(dateInput);
   date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
 
   const id = uuidv4();
 
   const values = { name, date, id };
-  const todo = generateTodo(values);
-  todosList.append(todo);
+  renderTodo(values); // using renderTodo to avoid duplication
   newTodoValidator.resetValidation();
   closeModal(addTodoPopup);
 });
 
+// Render initial todos
 initialTodos.forEach((item) => {
-  const todo = generateTodo(item);
-  todosList.append(todo);
+  renderTodo(item);
 });
 
 const newTodoValidator = new formValidator(validationConfig, addTodoForm);
