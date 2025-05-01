@@ -71,8 +71,8 @@ const addTodoPopup = new PopupWithForm({
     newTodoValidator.resetValidation();
   },
   close() {
-    super.close();
-    this._form.reset();
+    this._popupElement.classList.remove("popup_visible");
+    document.removeEventListener("keydown", this._handleEscClose);
   },
 });
 
