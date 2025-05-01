@@ -34,9 +34,20 @@ const generateTodo = (data) => {
 };
 
 // Adds new todo to DOM
+const todoSection = new Section({
+  items: initialTodos,
+  renderer: (data) => {
+    const todoElement = generateTodo(data);
+    todoSection.addItem(todoElement);
+  },
+  containerSelector: ".todos__list",
+});
+
+todoSection.renderItems();
+
 const renderTodo = (data) => {
   const todoElement = generateTodo(data);
-  todosList.append(todoElement);
+  todoSection.addItem(todoElement);
 };
 
 // Instantiate and set up popup with form
@@ -59,12 +70,13 @@ const addTodoPopup = new PopupWithForm({
     todoCounter.updateTotal(true); // Update counter when adding new
     newTodoValidator.resetValidation();
   },
+  close() {
+    super.close();
+    this._form.reset();
+  },
 });
 
 addTodoPopup.setEventListeners();
 
 const addTodoButton = document.querySelector(".button_action_add");
 addTodoButton.addEventListener("click", () => addTodoPopup.open());
-
-// Render initial todos
-initialTodos.forEach((item) => renderTodo(item));
